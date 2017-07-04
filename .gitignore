@@ -101,4 +101,4 @@ ENV/
 .mypy_cache/
 
 # pages
-pages/
+pages/*
