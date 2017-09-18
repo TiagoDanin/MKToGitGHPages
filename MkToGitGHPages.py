@@ -4,7 +4,7 @@ import datetime
 import os
 import re
 
-ignore = ['TiagoDanin.github.io', 'SendCH-Telegram', 'DesenvolvimentoDeBots']
+ignore = ['TiagoDanin.github.io', 'SendCH-Telegram', 'DesenvolvimentoDeBots', 'JUnicodeInfo', 'MKToGitGHPages2', 'ricardogouveia3.github.io']
 imagem = {}
 imagem['Atom-TerminalColor'] = 'atom.png'
 imagem['GenesiPassword'] = 'lua.png'
@@ -84,14 +84,14 @@ def github():
 				status = write_text(text, name)
 				if status:
 					if push_git:
-						os.system('cd pages/{}/ && git add -A && git commit -S -m "Update GH-Pages {}" && git config credential.helper store && git push'.format(name, date_commit))
+						os.system('cd pages/{}/ && git add -A && git commit -m "Update GH-Pages {}" && git config credential.helper store && git push'.format(name, date_commit))
 					print('{} - {} - {}'.format(readme_data, name, 'OK'))
 				else:
-					os.system('cd pages/ && git clone https://github.com/TiagoDanin/{}.git -b gh-pages'.format(name, date))
+					os.system('cd pages/ && git clone git@github.com:TiagoDanin/{}.git -b gh-pages'.format(name, date))
 					status = write_text(text, name)
 					if status:
 						if push_git:
-							os.system('cd pages/{}/ && git add -A && git commit -S -m "Update GH-Pages {}" && git config credential.helper store && git push'.format(name, date_commit))
+							os.system('cd pages/{}/ && git add -A && git commit -m "Update GH-Pages {}" && git config credential.helper store && git push'.format(name, date_commit))
 						print('{} - {} - {}'.format(readme_data, name, 'OK'))
 					else:
 						print('{} - {} - {}'.format(readme_data, name, 'No has git-repo'))
