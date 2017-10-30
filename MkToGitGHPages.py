@@ -1,10 +1,17 @@
+# -*- coding:utf-8
 from SuperMarkdown import SuperMarkdown
 import requests
 import datetime
 import os
 import re
 
-ignore = ['TiagoDanin.github.io', 'SendCH-Telegram', 'DesenvolvimentoDeBots', 'JUnicodeInfo', 'MKToGitGHPages2', 'ricardogouveia3.github.io']
+ignore = [
+	'TiagoDanin.github.io',
+	'SendCH-Telegram',
+	'DesenvolvimentoDeBots',
+	'JUnicodeInfo',
+	'MKToGitGHPages2'
+]
 imagem = {}
 imagem['Atom-TerminalColor'] = 'atom.png'
 imagem['GenesiPassword'] = 'lua.png'
@@ -25,7 +32,7 @@ push_git = True
 
 def write_text(text, name):
 	try:
-		file = open('pages/{}/index.html'.format(name), 'w')
+		file = open('pages/{}/index.html'.format(name), 'w', encoding='utf-8')
 	except FileNotFoundError as error:
 		return False
 	file.write(text)
@@ -64,13 +71,13 @@ def github():
 			img = imagem[name]
 
 		if name in ignore:
-			print('{} - {} - {}'.format(readme_data, name, 'IGNORE'))
+			print('[!] {} - {} - {}'.format(readme_data, name, 'IGNORE'))
 		else:
 			readme_data = requests.get(url_readme)
 			readme = readme_data.text
 			if readme != '404: Not Found':
 				text = ''
-				supermd = SuperMarkdown()
+				supermd = SuperMarkdown.SuperMarkdown()
 				supermd.add_content(text=readme)
 				file = open('defaut.html', 'r')
 				text = file.read()
@@ -82,20 +89,21 @@ def github():
 									date_commit=date_commit,
 									html_text=re.sub('</style>', '-->', (re.sub('<style>', '<!--', supermd.build()))))
 				status = write_text(text, name)
+				#git config credential.helper store
 				if status:
 					if push_git:
 						os.system('cd pages/{}/ && git add -A && git commit -m "Update GH-Pages {}" && git config credential.helper store && git push'.format(name, date_commit))
-					print('{} - {} - {}'.format(readme_data, name, 'OK'))
+					print('[+] {} - {} - {}'.format(readme_data, name, 'OK'))
 				else:
 					os.system('cd pages/ && git clone git@github.com:TiagoDanin/{}.git -b gh-pages'.format(name, date))
 					status = write_text(text, name)
 					if status:
 						if push_git:
 							os.system('cd pages/{}/ && git add -A && git commit -m "Update GH-Pages {}" && git config credential.helper store && git push'.format(name, date_commit))
-						print('{} - {} - {}'.format(readme_data, name, 'OK'))
+						print('[+] {} - {} - {}'.format(readme_data, name, 'OK'))
 					else:
-						print('{} - {} - {}'.format(readme_data, name, 'No has git-repo'))
+						print('[!] {} - {} - {}'.format(readme_data, name, 'No has git-repo'))
 			else:
-				print('{} - {} - {}'.format(readme_data, name, 'No has README file'))
+				print('[+] {} - {} - {}'.format(readme_data, name, 'No has README file'))
 
 github()

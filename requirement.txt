@@ -1,0 +1,6 @@
+requests
+markdown
+markdown-checklist
+graphviz
+beautifulsoup4
+supermarkdown
